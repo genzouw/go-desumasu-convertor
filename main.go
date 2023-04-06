@@ -3,8 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"genzouw/go-desumasu-convertor/desumasu"
 	"os"
+
+	"github.com/genzouw/go-desumasu-convertor/desumasu"
 )
 
 func main() {
