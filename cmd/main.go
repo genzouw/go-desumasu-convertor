@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/genzouw/go-desumasu-convertor/desumasu"
+	"github.com/genzouw/go-desumasu-convertor/pkg/desumasu"
 )
 
 func main() {

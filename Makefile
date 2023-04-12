@@ -1,2 +1,2 @@
 build:
-	go build -o desumasu-convertor .
+	go build -o desumasu-convertor ./cmd/
