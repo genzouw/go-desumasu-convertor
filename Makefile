@@ -1,5 +1,7 @@
 .PHONY: build test clean
 
+.DEFAULT_GOAL := all
+
 build: clean
 	go build -o desumasu-convertor ./cmd/
 test: build
