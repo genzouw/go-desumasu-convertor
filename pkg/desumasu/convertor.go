@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"sort"
+	"strings"
 )
 
 var convertList = [][]string{
@@ -41,61 +42,114 @@ var convertList = [][]string{
 	{"されました", "された"},
 	{"れませんので", "れないので"},
 	{"ました", "た", "1"},
-	{"ります", "る", "1"},
-	{"ます", "る"},
-	{"です", "だ"},
+	{"ります", "る"},
 	{"思います", "思う"},
 	{"感じます", "感じる"},
 	{"知りました", "知った"},
 	{"なりました", "なった"},
 	{"しまいます", "しまう"},
 	{"ておきましょう", "ておく"},
-	{"のでしょうか", "のだろうか"},
 	{"のでしょうか", "のか"},
+	{"のでしょうか", "のだろうか"},
 	{"でしょうか", "だろうか"},
+	{"食べます", "食べる"},
+	{"です", "だ"},
+}
+
+type conversionPair struct {
+	Src  string
+	Dest string
 }
 
 // Convert converts Keitai to Jotai or Jotai to Keitai
+// input: Input string
 // toJotai: true = Keitai to Jotai, false = Jotai to Keitai
 // checkNe: true = Check "ね" at the end of the sentence
 // removeNe: true = Remove "ね" at the end of the sentence
-func Convert(output string, toJotai bool, checkNe bool, removeNe bool) string {
+// return: Converted string
+func Convert(input string, toJotai bool, checkNe bool, removeNe bool) string {
 	separator := "、。（）()！？"
 
-	list := [][]string{}
-	if toJotai {
-		list = convertList
-	} else {
-		for _, v := range convertList {
-			if len(v) > 2 && v[2] == "1" {
-				continue
-			}
+	table := generateConversionTable(toJotai)
 
-			list = append(list, []string{v[1], v[0]})
+	// Sort by length of Src and Dest.
+	// Priority: Src's length > Dest's length, so Src's length is multiplied by 10.
+	sort.Slice(table, func(i, j int) bool {
+		return len(table[i].Src)*10+len(table[i].Dest) > len(table[j].Src)*10+len(table[j].Dest)
+	})
+
+	parts := splitString(input, separator)
+	for i, part := range parts {
+		parts[i] = convert(part, table, separator, checkNe, removeNe)
+	}
+
+	return strings.Join(parts, "")
+}
+
+func generateConversionTable(toJotai bool) []conversionPair {
+	table := make([]conversionPair, len(convertList))
+
+	for i, pair := range convertList {
+		if len(pair) > 2 && pair[2] == "1" {
+			continue
+		}
+
+		if toJotai {
+			table[i] = conversionPair{pair[0], pair[1]}
+		} else {
+			table[i] = conversionPair{pair[1], pair[0]}
 		}
 	}
 
-	sort.SliceStable(list, func(i, j int) bool {
-		return len(list[i][0]) > len(list[j][0])
-	})
+	return table
+}
 
-	for _, i := range list {
-		src := i[0]
-		dest := i[1]
+func splitString(input string, separator string) []string {
+	var (
+		r []string
+		p int
+	)
 
-		output = replaceAllString(output, src, separator, dest)
+	re := regexp.MustCompile(fmt.Sprintf("[%s]", separator))
+
+	is := re.FindAllStringIndex(input, -1)
+	if is == nil {
+		return append(r, input)
+	}
+	for _, i := range is {
+		r = append(r, input[p:i[1]])
+		p = i[1]
+	}
+	return append(r, input[p:])
+}
+
+func convert(input string, table []conversionPair, separator string, checkNe bool, removeNe bool) string {
+	output := input
+
+	for _, pair := range table {
+		src := pair.Src
+		dest := pair.Dest
+
+		output = replaceAllString(output, src, dest, separator)
+
 		if checkNe {
 			if !removeNe {
 				dest = dest + "ね"
 			}
-			output = replaceAllString(output, src+"ね", separator, dest)
+			output = replaceAllString(output, src+"ね", dest, separator)
+		}
+
+		if output != input {
+			break
 		}
 	}
+
 	return output
 }
 
-func replaceAllString(output, src, separator, dest string) string {
-	left := fmt.Sprintf("(%s)([%s])", src, separator)
-	right := fmt.Sprintf("%s$2", dest)
-	return regexp.MustCompile(left).ReplaceAllString(output, right)
+func replaceAllString(input, src, dest, separator string) string {
+	left := "(" + regexp.QuoteMeta(src) + ")([" + regexp.QuoteMeta(separator) + "])"
+	right := dest + "$2"
+	re := regexp.MustCompile(left)
+	return re.ReplaceAllString(input, right)
 }
