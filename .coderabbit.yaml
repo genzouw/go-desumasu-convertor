@@ -1,14 +1,14 @@
 # CodeRabbit configuration
 # https://docs.coderabbit.ai/reference/configuration
 
-language: 'ja-JP'
+language: "ja-JP"
 early_access: false
 enable_free_tier: true
 
 reviews:
   # Go 製の文章スタイル変換 CLI を OSS として配布しているリポジトリのため、利用者環境への影響を取りこぼしたくない。
   # "assertive" で検出感度を高めに保ち、ノイズが過剰になった場合は "chill" に戻すことも検討する。
-  profile: 'assertive'
+  profile: "assertive"
 
   # PR 全体に対する指針。path_instructions に "**/*" を入れるとファイル毎に
   # 繰り返し適用されてノイズが増えるため、広範な指示は instructions に集約する。
@@ -37,14 +37,14 @@ reviews:
       - main
 
   path_instructions:
-    - path: '**/*.go'
+    - path: "**/*.go"
       instructions: |
         Go コードとしてレビューしてください:
         - エラーが握り潰されていないか (`_ = err` / 戻り値破棄)。
         - `exec.Command` 等で外部入力をそのまま引数に渡していないか。
         - 並行処理での競合 (共有変数のロック漏れ / チャネルの送受信不一致) が無いか。
-        - 標準入出力／ファイル I/O が defer Close されているか。
-    - path: '.github/workflows/**'
+        - ファイル I/O が適切にクローズ（defer Close 等）されているか（※標準入出力は除く）。
+    - path: ".github/workflows/**"
       instructions: |
         GitHub Actions ワークフローとしてレビューしてください:
         - シークレットの露出 (echo / set-output 経由のリーク) が無いか。
@@ -53,24 +53,24 @@ reviews:
 
   # 生成物 / 依存物 / ロックファイルなどはレビュー対象から除外する。
   path_filters:
-    - '!**/dist/**'
-    - '!**/build/**'
-    - '!**/coverage/**'
-    - '!**/node_modules/**'
-    - '!**/.wrangler/**'
-    - '!**/.turbo/**'
-    - '!**/.next/**'
-    - '!infra/cdktf.out/**'
-    - '!infra/.gen/**'
-    - '!**/bun.lock'
-    - '!**/package-lock.json'
-    - '!**/yarn.lock'
-    - '!**/pnpm-lock.yaml'
-    - '!**/*.min.js'
-    - '!**/*.min.css'
-    - '!**/*.map'
-    - '!**/*.snap'
-    - '!**/*.tsbuildinfo'
+    - "!**/dist/**"
+    - "!**/build/**"
+    - "!**/coverage/**"
+    - "!**/node_modules/**"
+    - "!**/.wrangler/**"
+    - "!**/.turbo/**"
+    - "!**/.next/**"
+    - "!infra/cdktf.out/**"
+    - "!infra/.gen/**"
+    - "!**/bun.lock"
+    - "!**/package-lock.json"
+    - "!**/yarn.lock"
+    - "!**/pnpm-lock.yaml"
+    - "!**/*.min.js"
+    - "!**/*.min.css"
+    - "!**/*.map"
+    - "!**/*.snap"
+    - "!**/*.tsbuildinfo"
 
   abort_on_close: true
 
