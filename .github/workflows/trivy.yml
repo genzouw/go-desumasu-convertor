@@ -42,6 +42,8 @@ jobs:
           sudo install -m 0755 trivy /usr/local/bin/trivy
 
       - name: Run Trivy (vulnerabilities)
+        # 既存の脆弱性を段階的に修正するまでは赤検知にしない (exit-code 0 = レポートのみ)。
+        # 整備完了後に exit-code 1 へ戻して赤検知に切り替える。
         run: |
           trivy fs \
             --format sarif \
