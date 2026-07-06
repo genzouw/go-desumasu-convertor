@@ -4,13 +4,13 @@ on:
   push:
     branches: [main, master]
     paths:
-      - '.github/workflows/**'
-      - '.github/actionlint*'
+      - ".github/workflows/**"
+      - ".github/actionlint*"
   pull_request:
     branches: [main, master]
     paths:
-      - '.github/workflows/**'
-      - '.github/actionlint*'
+      - ".github/workflows/**"
+      - ".github/actionlint*"
 
 concurrency:
   group: actionlint-${{ github.ref }}
@@ -89,6 +89,7 @@ jobs:
             --include='*.yml' --include='*.yaml' \
             -e "^[[:space:]]*[\"']?pull_request_targ[e]t[\"']?[[:space:]]*:" \
             -e "^[[:space:]]*[\"']?on[\"']?[[:space:]]*:[[:space:]]*\[[^]]*pull_request_targ[e]t[^]]*\]" \
+            -e "^[[:space:]]*[\"']?on[\"']?[[:space:]]*:[[:space:]]*pull_request_targ[e]t[[:space:]]*$" \
             .github/workflows || true)
           if [ -n "$violations" ]; then
             echo "::error::フォークPRからのシークレット漏洩リスクがあるため、pull_request_target の使用は禁止されています:"
