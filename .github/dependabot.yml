@@ -11,6 +11,8 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "Asia/Tokyo"
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
     reviewers:
       - "genzouw"
@@ -29,21 +31,23 @@ updates:
         update-types: ["version-update:semver-major"]
 
   # Go modules
-  - package-ecosystem: 'gomod'
-    directory: '/'
+  - package-ecosystem: "gomod"
+    directory: "/"
     schedule:
-      interval: 'weekly'
-      day: 'monday'
-      time: '09:00'
-      timezone: 'Asia/Tokyo'
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Asia/Tokyo"
+    cooldown:
+      default-days: 7
     open-pull-requests-limit: 5
     reviewers:
-      - 'genzouw'
+      - "genzouw"
     labels:
-      - 'dependencies'
-      - 'go'
+      - "dependencies"
+      - "go"
     commit-message:
-      prefix: 'chore'
-      include: 'scope'
+      prefix: "chore"
+      include: "scope"
     pull-request-branch-name:
-      separator: '/'
+      separator: "/"
