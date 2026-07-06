@@ -4,17 +4,17 @@ on:
   push:
     branches: [main, master]
     paths:
-      - '**/Dockerfile'
-      - '**/Dockerfile.*'
-      - '.hadolint.yaml'
-      - '.github/workflows/hadolint.yml'
+      - "**/Dockerfile"
+      - "**/Dockerfile.*"
+      - ".hadolint.yaml"
+      - ".github/workflows/hadolint.yml"
   pull_request:
     branches: [main, master]
     paths:
-      - '**/Dockerfile'
-      - '**/Dockerfile.*'
-      - '.hadolint.yaml'
-      - '.github/workflows/hadolint.yml'
+      - "**/Dockerfile"
+      - "**/Dockerfile.*"
+      - ".hadolint.yaml"
+      - ".github/workflows/hadolint.yml"
 
 concurrency:
   group: hadolint-${{ github.ref }}
@@ -32,7 +32,7 @@ jobs:
     # 整備完了後に continue-on-error を外して赤検知に切り替える。
     continue-on-error: true
     env:
-      HADOLINT_VERSION: v2.12.0
+      HADOLINT_VERSION: v2.14.0
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
