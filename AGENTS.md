@@ -110,4 +110,4 @@ Issue では「なぜ既存の無料サービスでは目的を達成できな�
 
 ## 7. 本ポリシーの適用範囲
 
-本ポリシーは [@genzouw](https://github.com/genzouw) が公開しているすべての公開リポジトリに共通で適用されます。
+[agents.md 規格](https://agents.md/) の仕様上、エージェントは各リポジトリのルートに配置された `AGENTS.md` のみを読み込みます。そのため本ポリシーは、この `AGENTS.md` が実際に配置されているリポジトリ（本リポジトリ [`genzouw/go-desumasu-convertor`](https://github.com/genzouw/go-desumasu-convertor)）にのみ適用されます。[@genzouw](https://github.com/genzouw) の他の公開リポジトリへ本ポリシーを適用する場合は、当該リポジトリに同内容の `AGENTS.md` を個別に配置する必要があり、本ファイルが存在しないリポジトリには自動的には適用されません。
