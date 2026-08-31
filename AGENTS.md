@@ -19,7 +19,7 @@
 
 上記をひとつでも満たさないサービスを組み込む PR は **MUST NOT** です。ただし、5節の例外申請プロセスに従い、PR 作成前に Issue でリポジトリオーナー ([@genzouw](https://github.com/genzouw)) の明示的な承認を得た例外は本条項の対象外とします。承認を得ていない場合、提出された PR は内容の良し悪しにかかわらずリポジトリオーナー ([@genzouw](https://github.com/genzouw)) の判断でクローズされます。
 
-### 1.1 MUST NOT — これらを含む PR は問答無用でクローズされます
+### 1.1 MUST NOT — 事前承認がない限り、これらを含む PR は例外なくクローズされます
 
 - **MUST NOT**: LLM プロバイダの API キー / トークンを GitHub Secrets に登録し、CI ワークフロー / GitHub Action から呼び出す構成の追加。
   - 該当する API キー例 (これらに限らない):
