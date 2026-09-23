@@ -7,8 +7,13 @@
   "semanticCommits": "enabled",
   "semanticCommitScope": "deps",
   "timezone": "Asia/Tokyo",
+  "description": [
+    "schedule の時間帯指定は Dependabot の schedule.time: \"09:00\" (Asia/Tokyo) の下限を維持するためのもの。",
+    "Renovate の cron は分単位を指定できず粒度が 1 時間のため、09:00 ちょうどではなく 9-23 時の範囲で表現する。",
+    "\"* * * * 1\" だと月曜 00:00 から PR が作られ、Dependabot 時代より早い時刻に更新 PR が届く。"
+  ],
   "schedule": [
-    "* * * * 1"
+    "* 9-23 * * 1"
   ],
   "minimumReleaseAge": "7 days",
   "prConcurrentLimit": 5,
