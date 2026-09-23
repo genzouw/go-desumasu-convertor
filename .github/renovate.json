@@ -1,0 +1,69 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "semanticCommits": "enabled",
+  "semanticCommitScope": "deps",
+  "timezone": "Asia/Tokyo",
+  "description": [
+    "schedule の時間帯指定は Dependabot の schedule.time: \"09:00\" (Asia/Tokyo) の下限を維持するためのもの。",
+    "Renovate の cron は分単位を指定できず粒度が 1 時間のため、09:00 ちょうどではなく 9-23 時の範囲で表現する。",
+    "\"* * * * 1\" だと月曜 00:00 から PR が作られ、Dependabot 時代より早い時刻に更新 PR が届く。"
+  ],
+  "schedule": [
+    "* 9-23 * * 1"
+  ],
+  "minimumReleaseAge": "7 days",
+  "prConcurrentLimit": 5,
+  "labels": [
+    "dependencies"
+  ],
+  "reviewers": [
+    "genzouw"
+  ],
+  "vulnerabilityAlerts": {
+    "description": [
+      "脆弱性修正は minimumReleaseAge と schedule の対象外にして即時 PR にする。",
+      "Dependabot の cooldown が security updates に効かなかったのと同じ挙動を保つため。"
+    ],
+    "minimumReleaseAge": null,
+    "schedule": [],
+    "addLabels": [
+      "security"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": [
+        "依存更新はすべて chore プレフィックスで出す。",
+        "config:recommended に含まれる :semanticPrefixFixDepsChoreOthers は本番依存を fix にするが、",
+        "fix は release 生成ツールがリリース対象として扱うため、Dependabot 時代と同じ chore に固定する。"
+      ],
+      "matchPackageNames": [
+        "*"
+      ],
+      "semanticCommitType": "chore"
+    },
+    {
+      "description": "GitHub Actions の更新のプレフィックスとラベル (Dependabot の commit-message.prefix と同じ)",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "semanticCommitType": "ci",
+      "addLabels": [
+        "github-actions"
+      ]
+    },
+    {
+      "description": "Go modules の更新には go ラベルを付ける",
+      "matchManagers": [
+        "gomod"
+      ],
+      "addLabels": [
+        "go"
+      ]
+    }
+  ]
+}
